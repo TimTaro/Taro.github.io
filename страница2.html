@@ -1,0 +1,87 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['form_name'] == 'loginform')
+{
+   $success_page = '';
+   $error_page = basename(__FILE__);
+   $database = './usersdb.php';
+   $crypt_pass = md5($_POST['password']);
+   $found = false;
+   $fullname = '';
+   $session_timeout = 600;
+   if(filesize($database) > 0)
+   {
+      $items = file($database, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+      foreach($items as $line)
+      {
+         list($username, $password, $email, $name, $active) = explode('|', trim($line));
+         if ($username == $_POST['username'] && $active != "0" && $password == $crypt_pass)
+         {
+            $found = true;
+            $fullname = $name;
+         }
+      }
+   }
+   if($found == false)
+   {
+      header('Location: '.$error_page);
+      exit;
+   }
+   else
+   {
+      if (session_id() == "")
+      {
+         session_start();
+      }
+      $_SESSION['username'] = $_POST['username'];
+      $_SESSION['fullname'] = $fullname;
+      $_SESSION['expires_by'] = time() + $session_timeout;
+      $_SESSION['expires_timeout'] = $session_timeout;
+      $rememberme = isset($_POST['rememberme']) ? true : false;
+      if ($rememberme)
+      {
+         setcookie('username', $_POST['username'], time() + 3600*24*30);
+         setcookie('password', $_POST['password'], time() + 3600*24*30);
+      }
+      header('Location: '.$success_page);
+      exit;
+   }
+}
+$username = isset($_COOKIE['username']) ? $_COOKIE['username'] : '';
+$password = isset($_COOKIE['password']) ? $_COOKIE['password'] : '';
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Безымянная страница</title>
+<meta name="generator" content="WYSIWYG Web Builder 10 - http://www.wysiwygwebbuilder.com">
+<link href="Taro.css" rel="stylesheet" type="text/css">
+<link href="страница2.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="wb_Login1" style="position:absolute;left:0px;top:0px;width:329px;height:189px;text-align:right;z-index:0;">
+<form name="loginform" method="post" action="<?php echo basename(__FILE__); ?>" id="loginform">
+<input type="hidden" name="form_name" value="loginform">
+<table id="Login1">
+<tr>
+   <td class="Login1_header" colspan="2" style="height:27px;">Войти в аккаунт</td>
+</tr>
+<tr>
+   <td style="height:25px;width:107px">Логин:</td>
+   <td style="text-align:left"><input class="Login1_input" name="username" type="text" id="username" value="<?php echo $username; ?>"></td>
+</tr>
+<tr>
+   <td style="height:25px">Пароль:</td>
+   <td style="text-align:left"><input class="Login1_input" name="password" type="password" id="password" value="<?php echo $password; ?>"></td>
+</tr>
+<tr>
+   <td>&nbsp;</td><td style="text-align:left;height:25px"><input id="rememberme" type="checkbox" name="rememberme">Запомнить меня</td>
+</tr>
+<tr>
+   <td>&nbsp;</td><td style="text-align:left;vertical-align:bottom"><input class="Login1_button" type="submit" name="login" value="Войти" id="login"></td>
+</tr>
+</table>
+</form>
+</div>
+</body>
+</html>

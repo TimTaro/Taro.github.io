@@ -1,0 +1,53 @@
+body
+{
+   background-color: #FFFFFF;
+   color: #000000;
+   font-family: Arial;
+   font-size: 13px;
+   margin: 0;
+   padding: 0;
+}
+#Signup1
+{
+   background-color: #526472;
+   border-color:#222222;
+   border-width:7px;
+   border-style: solid;
+   color: #000000;
+   font-family: Arial;
+   font-size: 20px;
+   text-align: right;
+   border-spacing: 4px;
+   width: 545px;
+   height: 257px;
+}
+.Signup1_header
+{
+   background-color: #A9A9A9;
+   color: #FFFFFF;
+   text-align: center;
+}
+.Signup1_input
+{
+   background-color: #FFFFFF;
+   border-color: #878787;
+   border-width: 1px;
+   border-style: solid;
+   color: #000000;
+   font-family: Arial;
+   font-size: 20px;
+   width: 195px;
+   height: 18px;
+}
+.Signup1_button
+{
+   background-color: #FFFFFF;
+   border-color: #222222;
+   border-width: 7px;
+   border-style: solid;
+   color: #000000;
+   font-family: Arial;
+   font-size: 20px;
+   width: 195px;
+   height: 42px;
+}
